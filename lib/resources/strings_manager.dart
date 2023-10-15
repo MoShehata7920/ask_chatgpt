@@ -7,5 +7,9 @@ class AppStrings {
   static const String noRouteTitle = "No Route Title";
   static const String noRouteFound = "No Route Found";
 
-  // Home
+  // Login
+  static const String welcomeText = "Welcome to ChatGPT";
+  static const String logText = "Login with your OpenAI account to continue";
+  static const String login = "LogIn";
+  static const String singUp = "singUp";
 }
