@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1046163958640",
+    "project_id": "ask-chatgpt-99a9f",
+    "storage_bucket": "ask-chatgpt-99a9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046163958640:android:e9ef0c2c66f7406176fdb5",
+        "android_client_info": {
+          "package_name": "com.example.ask_chatgpt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKGcDRr6TPZ5Nk_vbiHWIQW4r8VR7u14Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
