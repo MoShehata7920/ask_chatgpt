@@ -1,3 +1,4 @@
+import 'package:ask_chatgpt/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class ElevationButtonWidget extends StatelessWidget {
@@ -9,7 +10,7 @@ class ElevationButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ElevatedButton.styleFrom(backgroundColor: const Color(0XFF16A281)),
+      style: ElevatedButton.styleFrom(backgroundColor: btnBg),
       onPressed: () {
         buttonFunction();
       },

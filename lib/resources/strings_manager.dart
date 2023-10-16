@@ -11,5 +11,17 @@ class AppStrings {
   static const String welcomeText = "Welcome to ChatGPT";
   static const String logText = "Login with your OpenAI account to continue";
   static const String login = "LogIn";
-  static const String singUp = "singUp";
+  static const String welcomeBack = "Welcome Back";
+  static const String alreadyHaveAccount = "Already Have An Account?";
+  static const String singUp = "SingUp";
+  static const String createAccount = "Create Your Account";
+  static const String donHaveAccount = "Don't have an account?";
+  static const String signInGoogle = "Continue with Google";
+  static const String cantBeEmpty = "can't be empty";
+  static const String notValidEmail = "Email needs to be valid";
+  static const String notValidPassword = "Password needs to be longer than 8 digits";
+  static const String emailHint = "ex:mohamed@gmail.com";
+  static const String emailAddress = "Email Address";
+  static const String password = "Password";
+  static const String or = "OR";
 }

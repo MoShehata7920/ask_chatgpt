@@ -1,4 +1,5 @@
 import 'package:ask_chatgpt/resources/assets_manager.dart';
+import 'package:ask_chatgpt/resources/routes_manager.dart';
 import 'package:ask_chatgpt/resources/strings_manager.dart';
 import 'package:ask_chatgpt/service/animation.dart';
 import 'package:ask_chatgpt/widgets/elvation_button_widget.dart';
@@ -37,13 +38,17 @@ class HomeScreenBody extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             ElevationButtonWidget(
               buttonText: AppStrings.login,
-              buttonFunction: () {},
+              buttonFunction: () {
+                Navigator.pushNamed(context, Routes.loginRoute);
+              },
             ).animateOnPageLoad(
                 msDelay: 300, dx: -70.0, dy: 0.0, showDelay: 300),
             const SizedBox(width: 10),
             ElevationButtonWidget(
               buttonText: AppStrings.singUp,
-              buttonFunction: () {},
+              buttonFunction: () {
+                Navigator.pushNamed(context, Routes.signUpRoute);
+              },
             ).animateOnPageLoad(
                 msDelay: 300, dx: 70.0, dy: 0.0, showDelay: 300),
           ])
