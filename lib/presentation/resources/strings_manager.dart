@@ -19,7 +19,11 @@ class AppStrings {
   static const String signInGoogle = "Continue with Google";
   static const String cantBeEmpty = "can't be empty";
   static const String notValidEmail = "Email needs to be valid";
-  static const String notValidPassword = "Password needs to be longer than 8 digits";
+  static const String notValidPassword =
+      "Password needs to be longer than 8 digits";
+  static const String notValidName = "Sorry This is not valid Name";
+  static const String userNameHint = "ex:Mohamed";
+  static const String userName = "User Name";
   static const String emailHint = "ex:mohamed@gmail.com";
   static const String emailAddress = "Email Address";
   static const String password = "Password";

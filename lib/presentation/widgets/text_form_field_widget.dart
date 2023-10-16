@@ -1,5 +1,5 @@
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
-import 'package:ask_chatgpt/presentation/constants/text_field_enum.dart';
+import 'package:ask_chatgpt/presentation/constants/enums/text_field_enum.dart';
 import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/service/functions.dart';
@@ -29,9 +29,9 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
       style: const TextStyle(color: Colors.black),
       controller: widget.controller,
       autofocus: widget.textFieldEnum == TextFieldEnum.email ? true : false,
-      obscureText: widget.textFieldEnum == TextFieldEnum.email
-          ? false
-          : isPasswordObscured,
+      obscureText: widget.textFieldEnum == TextFieldEnum.password
+          ? isPasswordObscured
+          : false,
       validator: (value) {
         if (value!.isEmpty) {
           return '${widget.label} ${AppStrings.cantBeEmpty}';
@@ -46,6 +46,12 @@ class _TextFormFieldWidgetState extends State<TextFormFieldWidget> {
           case TextFieldEnum.password:
             if (value.length < 8) {
               return AppStrings.notValidPassword;
+            }
+            break;
+
+          case TextFieldEnum.userName:
+            if (value.isEmpty) {
+              return AppStrings.notValidName;
             }
             break;
         }

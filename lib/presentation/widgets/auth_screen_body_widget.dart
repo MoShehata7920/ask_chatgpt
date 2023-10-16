@@ -1,6 +1,7 @@
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
-import 'package:ask_chatgpt/presentation/constants/text_field_enum.dart';
+import 'package:ask_chatgpt/presentation/constants/enums/text_field_enum.dart';
 import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/widgets/auth_button_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/google_button.dart';
@@ -8,19 +9,12 @@ import 'package:ask_chatgpt/presentation/widgets/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreenBodyWidget extends StatefulWidget {
-  const AuthScreenBodyWidget(
-      {super.key,
-      required this.greetingText,
-      required this.navigationText,
-      required this.navigationButtonText,
-      required this.navigationRouteName,
-      required this.authButtonText,
-      required this.authFunction});
-  final String greetingText,
-      navigationText,
-      navigationButtonText,
-      navigationRouteName,
-      authButtonText;
+  const AuthScreenBodyWidget({
+    super.key,
+    required this.isLoginScreen,
+    required this.authFunction,
+  });
+  final bool isLoginScreen;
   final Function authFunction;
 
   @override
@@ -28,6 +22,7 @@ class AuthScreenBodyWidget extends StatefulWidget {
 }
 
 class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
+  TextEditingController useNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -57,7 +52,9 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
               Image.asset(ImageAssets.logo2, width: 150),
               const SizedBox(height: 50),
               Text(
-                widget.greetingText,
+                widget.isLoginScreen
+                    ? AppStrings.welcomeBack
+                    : AppStrings.createAccount,
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
@@ -77,6 +74,15 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
                       label: AppStrings.emailAddress,
                     ),
                     const SizedBox(height: 10),
+                    !widget.isLoginScreen
+                        ? TextFormFieldWidget(
+                            controller: useNameController,
+                            textFieldEnum: TextFieldEnum.userName,
+                            hintText: AppStrings.userNameHint,
+                            label: AppStrings.userName,
+                          )
+                        : const SizedBox.shrink(),
+                    SizedBox(height: widget.isLoginScreen ? 0 : 10),
                     TextFormFieldWidget(
                       controller: passwordController,
                       textFieldEnum: TextFieldEnum.password,
@@ -85,7 +91,9 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
                     ),
                     const SizedBox(height: 20),
                     AuthButtonWidget(
-                      buttonText: widget.authButtonText,
+                      buttonText: widget.isLoginScreen
+                          ? AppStrings.login
+                          : AppStrings.singUp,
                       authFunction: () {
                         widget.authFunction();
                       },
@@ -95,17 +103,24 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
                       child: Wrap(
                         children: [
                           Text(
-                            widget.navigationText,
+                            widget.isLoginScreen
+                                ? AppStrings.donHaveAccount
+                                : AppStrings.alreadyHaveAccount,
                             style: const TextStyle(color: Color(0XFF343541)),
                           ),
                           const SizedBox(width: 5),
                           GestureDetector(
                             onTap: () {
                               Navigator.pushNamed(
-                                  context, widget.navigationRouteName);
+                                  context,
+                                  widget.isLoginScreen
+                                      ? Routes.signUpRoute
+                                      : Routes.loginRoute);
                             },
                             child: Text(
-                              widget.navigationButtonText,
+                              widget.isLoginScreen
+                                  ? AppStrings.singUp
+                                  : AppStrings.login,
                               style: const TextStyle(color: btnBg),
                             ),
                           )
