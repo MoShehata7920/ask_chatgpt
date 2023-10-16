@@ -1,10 +1,10 @@
-import 'package:ask_chatgpt/constants/colors.dart';
-import 'package:ask_chatgpt/constants/text_field_enum.dart';
-import 'package:ask_chatgpt/resources/assets_manager.dart';
-import 'package:ask_chatgpt/resources/strings_manager.dart';
-import 'package:ask_chatgpt/widgets/auth_button_widget.dart';
-import 'package:ask_chatgpt/widgets/google_button.dart';
-import 'package:ask_chatgpt/widgets/text_form_field_widget.dart';
+import 'package:ask_chatgpt/presentation/constants/colors.dart';
+import 'package:ask_chatgpt/presentation/constants/text_field_enum.dart';
+import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/widgets/auth_button_widget.dart';
+import 'package:ask_chatgpt/presentation/widgets/google_button.dart';
+import 'package:ask_chatgpt/presentation/widgets/text_form_field_widget.dart';
 import 'package:flutter/material.dart';
 
 class AuthScreenBodyWidget extends StatefulWidget {

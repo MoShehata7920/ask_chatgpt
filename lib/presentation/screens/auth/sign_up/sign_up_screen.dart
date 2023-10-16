@@ -1,6 +1,6 @@
-import 'package:ask_chatgpt/resources/routes_manager.dart';
-import 'package:ask_chatgpt/resources/strings_manager.dart';
-import 'package:ask_chatgpt/widgets/auth_screen_body_widget.dart';
+import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/widgets/auth_screen_body_widget.dart';
 import 'package:flutter/material.dart';
 
 class SingUpScreen extends StatelessWidget {

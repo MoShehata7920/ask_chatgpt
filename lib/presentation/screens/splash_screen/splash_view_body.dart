@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:ask_chatgpt/resources/assets_manager.dart';
-import 'package:ask_chatgpt/resources/routes_manager.dart';
-import 'package:ask_chatgpt/resources/strings_manager.dart';
-import 'package:ask_chatgpt/service/animation.dart';
-import 'package:ask_chatgpt/service/utils.dart';
+import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/service/animation.dart';
+import 'package:ask_chatgpt/presentation/service/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

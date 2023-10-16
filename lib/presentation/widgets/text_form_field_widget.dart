@@ -1,8 +1,8 @@
-import 'package:ask_chatgpt/constants/colors.dart';
-import 'package:ask_chatgpt/constants/text_field_enum.dart';
-import 'package:ask_chatgpt/resources/icons_manager.dart';
-import 'package:ask_chatgpt/resources/strings_manager.dart';
-import 'package:ask_chatgpt/service/functions.dart';
+import 'package:ask_chatgpt/presentation/constants/colors.dart';
+import 'package:ask_chatgpt/presentation/constants/text_field_enum.dart';
+import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/service/functions.dart';
 import 'package:flutter/material.dart';
 
 class TextFormFieldWidget extends StatefulWidget {

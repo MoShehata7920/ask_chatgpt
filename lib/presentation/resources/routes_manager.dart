@@ -1,8 +1,8 @@
-import 'package:ask_chatgpt/resources/strings_manager.dart';
-import 'package:ask_chatgpt/screens/auth/login/login_screen.dart';
-import 'package:ask_chatgpt/screens/auth/sign_up/sign_up_screen.dart';
-import 'package:ask_chatgpt/screens/home/home_screen.dart';
-import 'package:ask_chatgpt/screens/splash_screen/splash_screen.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/screens/auth/login/login_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/auth/sign_up/sign_up_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/home/home_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class Routes {

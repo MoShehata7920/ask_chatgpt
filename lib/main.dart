@@ -1,6 +1,6 @@
 import 'package:ask_chatgpt/firebase_options.dart';
-import 'package:ask_chatgpt/resources/routes_manager.dart';
-import 'package:ask_chatgpt/screens/splash_screen/splash_screen.dart';
+import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
+import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 

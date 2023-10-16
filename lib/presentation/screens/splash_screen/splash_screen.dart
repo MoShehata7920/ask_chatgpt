@@ -1,4 +1,4 @@
-import 'package:ask_chatgpt/screens/splash_screen/splash_view_body.dart';
+import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_view_body.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatelessWidget {
