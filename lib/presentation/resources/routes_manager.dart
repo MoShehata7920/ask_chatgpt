@@ -1,6 +1,7 @@
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/screens/auth/login/login_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/auth/sign_up/sign_up_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/chat/chat_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/home/home_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class Routes {
   static const String homeRoute = "/home";
   static const String loginRoute = "/login";
   static const String signUpRoute = "/signUp";
+  static const String chatScreenRoute = "/chatScreen";
 }
 
 class RouteGenerator {
@@ -26,6 +28,9 @@ class RouteGenerator {
 
       case Routes.signUpRoute:
         return MaterialPageRoute(builder: (context) => const SingUpScreen());
+
+      case Routes.chatScreenRoute:
+        return MaterialPageRoute(builder: (context) => const ChatScreen());
 
       default:
         return unDefinedRoute();

@@ -43,7 +43,7 @@ class HomeScreenBody extends StatelessWidget {
               },
             ).animateOnPageLoad(
                 msDelay: 300, dx: -70.0, dy: 0.0, showDelay: 300),
-            const SizedBox(width: 10),
+            const SizedBox(width: 15),
             ElevationButtonWidget(
               buttonText: AppStrings.singUp,
               buttonFunction: () {
