@@ -7,6 +7,13 @@ class AppStrings {
   static const String noRouteTitle = "No Route Title";
   static const String noRouteFound = "No Route Found";
 
+  // Global Methods
+  static const String cancel = "Cancel";
+  static const String yes = "Yes";
+  static String errorOccurred = "An Error Occurred";
+  static String ok = "OK";
+  static String authError = "Authentication Error";
+
   // Login
   static const String welcomeText = "Welcome to ChatGPT";
   static const String logText = "Login with your OpenAI account to continue";

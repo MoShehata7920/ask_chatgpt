@@ -1,10 +1,16 @@
-import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:flutter/material.dart';
 
+import 'package:ask_chatgpt/presentation/constants/colors.dart';
+
 class AuthButtonWidget extends StatelessWidget {
-  const AuthButtonWidget({super.key, required this.buttonText, required this.authFunction});
+  const AuthButtonWidget(
+      {super.key,
+      required this.buttonText,
+      required this.authFunction,
+      required this.formKey});
   final String buttonText;
   final Function authFunction;
+  final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +23,7 @@ class AuthButtonWidget extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        authFunction();
+        handleAuth(context, formKey);
       },
       child: Text(
         buttonText,
@@ -26,5 +32,15 @@ class AuthButtonWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void handleAuth(BuildContext context, GlobalKey<FormState> formKey) {
+    FocusScope.of(context).unfocus();
+    var valid = formKey.currentState!.validate();
+    if (!valid) {
+      return;
+    } else {
+      authFunction();
+    }
   }
 }

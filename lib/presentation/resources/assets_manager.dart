@@ -11,4 +11,7 @@ class ImageAssets {
 class JsonAssets {
   //Splash
   static const String splash = "$jsonPath/splash.json";
+
+  static const String error = "$jsonPath/error.json";
+  static const String emailVerification = "$jsonPath/email_verification.json";
 }

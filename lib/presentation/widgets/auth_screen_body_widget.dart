@@ -1,21 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/text_field_enum.dart';
+import 'package:ask_chatgpt/presentation/manager/google_auth_cubit/google_auth_cubit.dart';
+import 'package:ask_chatgpt/presentation/manager/sign_in_cubit/sign_in_cubit.dart';
+import 'package:ask_chatgpt/presentation/manager/sign_up_cubit/sign_up_cubit.dart';
 import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/widgets/auth_button_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/google_button.dart';
+import 'package:ask_chatgpt/presentation/widgets/loading_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/text_form_field_widget.dart';
-import 'package:flutter/material.dart';
 
 class AuthScreenBodyWidget extends StatefulWidget {
   const AuthScreenBodyWidget({
     super.key,
     required this.isLoginScreen,
-    required this.authFunction,
   });
   final bool isLoginScreen;
-  final Function authFunction;
 
   @override
   State<AuthScreenBodyWidget> createState() => _AuthScreenBodyWidgetState();
@@ -26,7 +30,9 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -62,92 +68,122 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
                 ),
               ),
               const SizedBox(height: 20),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    TextFormFieldWidget(
-                      controller: emailController,
-                      textFieldEnum: TextFieldEnum.email,
-                      hintText: AppStrings.emailHint,
-                      label: AppStrings.emailAddress,
-                    ),
-                    const SizedBox(height: 10),
-                    !widget.isLoginScreen
-                        ? TextFormFieldWidget(
-                            controller: useNameController,
-                            textFieldEnum: TextFieldEnum.userName,
-                            hintText: AppStrings.userNameHint,
-                            label: AppStrings.userName,
-                          )
-                        : const SizedBox.shrink(),
-                    SizedBox(height: widget.isLoginScreen ? 0 : 10),
-                    TextFormFieldWidget(
-                      controller: passwordController,
-                      textFieldEnum: TextFieldEnum.password,
-                      hintText: '********',
-                      label: AppStrings.password,
-                    ),
-                    const SizedBox(height: 20),
-                    AuthButtonWidget(
-                      buttonText: widget.isLoginScreen
-                          ? AppStrings.login
-                          : AppStrings.singUp,
-                      authFunction: () {
-                        widget.authFunction();
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: Wrap(
+              !isLoading
+                  ? Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            widget.isLoginScreen
-                                ? AppStrings.donHaveAccount
-                                : AppStrings.alreadyHaveAccount,
-                            style: const TextStyle(color: Color(0XFF343541)),
+                          TextFormFieldWidget(
+                            controller: emailController,
+                            textFieldEnum: TextFieldEnum.email,
+                            hintText: AppStrings.emailHint,
+                            label: AppStrings.emailAddress,
                           ),
-                          const SizedBox(width: 5),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                  context,
-                                  widget.isLoginScreen
-                                      ? Routes.signUpRoute
-                                      : Routes.loginRoute);
+                          const SizedBox(height: 10),
+                          !widget.isLoginScreen
+                              ? TextFormFieldWidget(
+                                  controller: useNameController,
+                                  textFieldEnum: TextFieldEnum.userName,
+                                  hintText: AppStrings.userNameHint,
+                                  label: AppStrings.userName,
+                                )
+                              : const SizedBox.shrink(),
+                          SizedBox(height: widget.isLoginScreen ? 0 : 10),
+                          TextFormFieldWidget(
+                            controller: passwordController,
+                            textFieldEnum: TextFieldEnum.password,
+                            hintText: '********',
+                            label: AppStrings.password,
+                          ),
+                          const SizedBox(height: 20),
+                          AuthButtonWidget(
+                            buttonText: widget.isLoginScreen
+                                ? AppStrings.login
+                                : AppStrings.singUp,
+                            authFunction: () {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              if (widget.isLoginScreen) {
+                                context.read<SignInCubit>().handleSignIn(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      context: context,
+                                    );
+                              } else {
+                                context.read<SignUpCubit>().handleSignUp(
+                                      email: emailController.text,
+                                      username: useNameController.text,
+                                      password: passwordController.text,
+                                      context: context,
+                                    );
+                              }
                             },
-                            child: Text(
-                              widget.isLoginScreen
-                                  ? AppStrings.singUp
-                                  : AppStrings.login,
-                              style: const TextStyle(color: btnBg),
+                            formKey: _formKey,
+                          ),
+                          const SizedBox(height: 20),
+                          Center(
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  widget.isLoginScreen
+                                      ? AppStrings.donHaveAccount
+                                      : AppStrings.alreadyHaveAccount,
+                                  style:
+                                      const TextStyle(color: Color(0XFF343541)),
+                                ),
+                                const SizedBox(width: 5),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context,
+                                        widget.isLoginScreen
+                                            ? Routes.signUpRoute
+                                            : Routes.loginRoute);
+                                  },
+                                  child: Text(
+                                    widget.isLoginScreen
+                                        ? AppStrings.singUp
+                                        : AppStrings.login,
+                                    style: const TextStyle(color: btnBg),
+                                  ),
+                                )
+                              ],
                             ),
-                          )
+                          ),
+                          const SizedBox(height: 20),
+                          const Row(
+                            children: [
+                              Expanded(child: Divider(color: Colors.grey)),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                child: Text(
+                                  AppStrings.or,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: Divider(color: Colors.grey)),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          GoogleButton(
+                            googleAuthFunction: () {
+                              FocusScope.of(context).unfocus();
+                              setState(() {
+                                isLoading = true;
+                              });
+                              context
+                                  .read<GoogleAuthCubit>()
+                                  .handleGoogleAuth();
+                            },
+                          ),
                         ],
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Row(
-                      children: [
-                        Expanded(child: Divider(color: Colors.grey)),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Text(
-                            AppStrings.or,
-                            style: TextStyle(
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ),
-                        Expanded(child: Divider(color: Colors.grey)),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    const GoogleButton(),
-                  ],
-                ),
-              )
+                    )
+                  : const Center(child: LoadingWidget(size: 50))
             ],
           ),
         ),

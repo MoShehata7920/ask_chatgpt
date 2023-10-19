@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/text_field_enum.dart';
 import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/service/functions.dart';
-import 'package:flutter/material.dart';
 
 class TextFormFieldWidget extends StatefulWidget {
   const TextFormFieldWidget(
