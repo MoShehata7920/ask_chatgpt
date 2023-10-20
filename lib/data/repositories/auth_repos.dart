@@ -1,5 +1,6 @@
 import 'package:ask_chatgpt/data/models/custom_error.dart';
 import 'package:ask_chatgpt/presentation/constants/firestore_ref.dart';
+import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class AuthRepository {
   AuthRepository({required this.firebaseAuth, required this.firebaseFirestore});
 
   Stream<User?> get user => firebaseAuth.userChanges();
-  var error = 'Error occurred!';
+  var error = "Error occurred!";
 
   // sign up
   Future<void> signUp(
@@ -29,7 +30,7 @@ class AuthRepository {
         'userName': userName,
         'email': email,
         'profileImage':
-            'https://media.istockphoto.com/id/1223671392/vector/default-profile-picture-avatar-photo-placeholder-vector-illustration.jpg?s=612x612&w=0&k=20&c=s0aTdmT5aU6b8ot7VKm11DeID6NctRCpB755rA1BIP0=',
+            ImageAssets.avatarUrl,
         'auth_type': 'email/password'
       });
     } on FirebaseAuthException catch (e) {

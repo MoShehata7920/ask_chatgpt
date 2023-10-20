@@ -1,4 +1,4 @@
-import 'package:ask_chatgpt/data/repositories/auth_repos.dart';
+import 'package:ask_chatgpt/data/repositories/repos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -31,7 +31,13 @@ class MyApp extends StatelessWidget {
             firebaseAuth: FirebaseAuth.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
-        )
+        ),
+        RepositoryProvider(
+          create: (context) => ProfileRepository(
+            firebaseAuth: FirebaseAuth.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -60,6 +66,13 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => SignUpCubit(
               authRepository: context.read<AuthRepository>(),
+            ),
+          ),
+
+          // profile cubit
+          BlocProvider(
+            create: (context) => ProfileCubit(
+              profileRepository: context.read<ProfileRepository>(),
             ),
           ),
         ],
