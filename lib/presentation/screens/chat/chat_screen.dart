@@ -1,8 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart' as fbauth;
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
-import 'package:ask_chatgpt/data/models/user.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/process_status.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/status.dart';
@@ -10,11 +5,20 @@ import 'package:ask_chatgpt/presentation/manager/auth_bloc/auth_bloc.dart';
 import 'package:ask_chatgpt/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
+import 'package:ask_chatgpt/presentation/screens/chat/chat_screen_body.dart';
+import 'package:ask_chatgpt/presentation/service/global_methods.dart';
 import 'package:ask_chatgpt/presentation/widgets/container_bg.dart';
 import 'package:ask_chatgpt/presentation/widgets/loading_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/message_snackbar.dart';
 import 'package:ask_chatgpt/presentation/widgets/text_box.dart';
 import 'package:ask_chatgpt/presentation/widgets/text_loading_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fbauth;
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:ask_chatgpt/data/models/user.dart';
+import 'package:lottie/lottie.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -37,7 +41,6 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  // init State
   @override
   void initState() {
     fetchUserData();
@@ -58,82 +61,21 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       isLoading = true;
     });
-    print(textController.text);
-  }
-
-  // sign out action
-  void signOut() {
-    context.read<AuthBloc>().add(SignOutEvent());
-    Navigator.pushNamed(context, Routes.homeRoute);
   }
 
   // logout handle
   Future<void> logOutHandle() {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: primaryColor,
-        title: Row(children: const [
-          Icon(
-            Icons.logout,
-            color: Colors.white,
-          ),
-          SizedBox(width: 10),
-          Text(
-            'Do you want to log out?',
-            style: TextStyle(color: Colors.white),
-          ),
-        ]),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CircleAvatar(
-              backgroundImage: NetworkImage(
-                user.profileImage ?? ImageAssets.avatarUrl,
-              ),
-              radius: 30,
-            ),
-            const SizedBox(height: 10),
-            Text(
-              user.userName,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              user.email,
-              style: const TextStyle(color: Colors.white, fontSize: 14),
-            ),
-          ],
-        ),
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: btnBg,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () => signOut(),
-            child: const Text('Yes'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: btnBg,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Dismiss'),
-          ),
-        ],
-      ),
-    );
+    return GlobalMethods.warningDialog(
+        title: AppStrings.wantLogOut,
+        subtitle: user.email,
+        function: () {
+          context.read<AuthBloc>().add(SignOutEvent());
+        },
+        navigateTo: () {
+          Navigator.pushNamed(context, Routes.homeRoute);
+        },
+        warningIcon: JsonAssets.logoOut,
+        context: context);
   }
 
   @override
@@ -141,7 +83,67 @@ class _ChatScreenState extends State<ChatScreen> {
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Image.asset(ImageAssets.logo),
+        ),
+        title: const Text(
+          AppStrings.appName,
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        backgroundColor: const Color(0xFF0C385D),
+        actions: [
+          BlocListener<ProfileCubit, ProfileState>(
+            listener: (context, state) {
+              if (state.status == ProcessStatus.loading) {
+                const LoadingWidget(size: 10);
+              }
+            },
+            child: GestureDetector(
+                onTap: () {},
+                child: CircleAvatar(
+                  backgroundColor: btnBg,
+                  child: ClipOval(
+                    child: Image.network(
+                      user.profileImage == ""
+                          ? ImageAssets.avatarUrl
+                          : user.profileImage,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                )),
+          ),
+          GestureDetector(
+            onTap: () => logOutHandle(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LottieBuilder.asset(
+                JsonAssets.logoOut,
+                width: 35,
+              ),
+            ),
+          )
+        ],
+      ),
+      body: const ChatScreenBody(),
+      bottomSheet: ContainerBg(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            isLoading ? const TextLoading() : const SizedBox.shrink(),
+            TextBoxWidget(
+              textController: textController,
+              size: size,
+              generateResponse: generateResponse,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

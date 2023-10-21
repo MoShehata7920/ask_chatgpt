@@ -35,4 +35,9 @@ class AppStrings {
   static const String emailAddress = "Email Address";
   static const String password = "Password";
   static const String or = "OR";
+
+  // Chat Screen
+  static const String wantLogOut = "Do you want to log out?";
+  static const String appName = "Ask ChatGPT";
+  static const String sendMessage = "Send A Message";
 }

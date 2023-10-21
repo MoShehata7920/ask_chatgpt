@@ -1,4 +1,5 @@
 import 'package:ask_chatgpt/data/repositories/repos.dart';
+import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -78,7 +79,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           theme: ThemeData.dark()
-              .copyWith(scaffoldBackgroundColor: const Color(0xFF00001a)),
+              .copyWith(scaffoldBackgroundColor: backGroundColor),
           debugShowCheckedModeBanner: false,
           title: 'Ask ChatGPT',
           onGenerateRoute: RouteGenerator.getRoute,
