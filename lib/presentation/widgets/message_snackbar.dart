@@ -9,6 +9,7 @@ void displaySnackBar({
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      duration: const Duration(milliseconds: 350),
       backgroundColor: status == Status.success ? primaryColor : Colors.red,
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

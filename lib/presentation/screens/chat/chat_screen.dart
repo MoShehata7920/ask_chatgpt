@@ -16,6 +16,7 @@ import 'package:ask_chatgpt/presentation/widgets/text_box.dart';
 import 'package:ask_chatgpt/presentation/widgets/text_loading_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbauth;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:ask_chatgpt/data/models/user.dart';
@@ -198,7 +199,15 @@ class _ChatScreenState extends State<ChatScreen> {
   void regenerateResponse() {}
 
   // copy response
-  void copyResponse() {}
+  void copyResponse() {
+    Clipboard.setData(const ClipboardData(text: 'abcdef')).then(
+      (_) => displaySnackBar(
+        status: Status.success,
+        message: 'Copied successfully',
+        context: context,
+      ),
+    );
+  }
 
   // like response
   void likeResponse() {}
