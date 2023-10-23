@@ -79,6 +79,11 @@ class MyApp extends StatelessWidget {
               profileRepository: context.read<ProfileRepository>(),
             ),
           ),
+
+          // api_work cubit
+          BlocProvider(
+            create: (context) => OpenAiModelCubit(),
+          ),
         ],
         child: MaterialApp(
           theme: ThemeData.dark()

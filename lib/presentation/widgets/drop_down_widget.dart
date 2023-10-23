@@ -1,7 +1,9 @@
 import 'package:ask_chatgpt/data/repositories/api_repo.dart';
+import 'package:ask_chatgpt/presentation/manager/open_ai_model_cubit/open_ai_model_cubit.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ModelDropDownButton extends StatefulWidget {
   const ModelDropDownButton({Key? key}) : super(key: key);
@@ -11,7 +13,10 @@ class ModelDropDownButton extends StatefulWidget {
 }
 
 class _ModelDropDownButtonState extends State<ModelDropDownButton> {
-  var selectedModel = 'babbage';
+  // persisting model
+  void changeModel(String model) {
+    context.read<OpenAiModelCubit>().selectModel(model);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,51 +27,56 @@ class _ModelDropDownButtonState extends State<ModelDropDownButton> {
           const Center(
             child: Text(
               'Error Loading models',
-              style: TextStyle(color: btnBg),
+              style: TextStyle(color: Colors.white),
             ),
           );
         }
 
         if (snapshot.connectionState == ConnectionState.waiting) {
-          const CircularProgressIndicator(
-            backgroundColor: btnBg,
+          return const CircularProgressIndicator(
+            color: btnBg,
           );
         }
 
-        return snapshot.data == null || snapshot.data!.isEmpty
-            ? const SizedBox.shrink()
-            : DropdownButtonFormField(
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                value: selectedModel,
-                style: const TextStyle(color: Colors.white),
-                dropdownColor: msgBg,
-                iconEnabledColor: btnBg,
-                items: List<DropdownMenuItem>.generate(
-                  snapshot.data!.length,
-                  (index) => DropdownMenuItem(
-                    value: snapshot.data![index].id,
-                    child: Text(snapshot.data![index].id),
-                  ),
-                ).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedModel = value!;
-                  });
-                },
-              );
+        if (snapshot.data!.isEmpty || snapshot.data == null) {
+          const Center(
+            child: Text(
+              'Models are empty',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        }
+
+        return DropdownButtonFormField(
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: const BorderSide(color: Colors.white),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+          value: context.watch<OpenAiModelCubit>().state.selectedModel,
+          style: const TextStyle(color: Colors.white),
+          dropdownColor: msgBg,
+          iconEnabledColor: btnBg,
+          items: List<DropdownMenuItem>.generate(
+            snapshot.data!.length,
+            (index) => DropdownMenuItem(
+              value: snapshot.data![index].id,
+              child: Text(snapshot.data![index].id),
+            ),
+          ).toList(),
+          onChanged: (model) {
+            changeModel(model);
+          },
+        );
       },
     );
   }
