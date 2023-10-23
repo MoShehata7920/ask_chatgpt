@@ -1,3 +1,4 @@
+import 'package:ask_chatgpt/data/repositories/api_repo.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
@@ -10,47 +11,62 @@ class ModelDropDownButton extends StatefulWidget {
 }
 
 class _ModelDropDownButtonState extends State<ModelDropDownButton> {
-  var selectedModel = 'Mohamed';
+  var selectedModel = 'babbage';
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.white),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-      value: selectedModel,
-      style: const TextStyle(color: Colors.white),
-      dropdownColor: msgBg,
-      iconEnabledColor: btnBg,
-      items: const [
-        DropdownMenuItem(
-          value: 'Mohamed',
-          child: Text('Mohamed'),
-        ),
-        DropdownMenuItem(
-          value: 'Ahmed',
-          child: Text('Ahmed'),
-        ),
-        DropdownMenuItem(
-          value: 'Ziad',
-          child: Text('Ziad'),
-        ),
-      ],
-      onChanged: (value) {
-        setState(() {
-          selectedModel = value!;
-        });
+    return FutureBuilder(
+      future: APIRepository.getModels(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          const Center(
+            child: Text(
+              'Error Loading models',
+              style: TextStyle(color: btnBg),
+            ),
+          );
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          const CircularProgressIndicator(
+            backgroundColor: btnBg,
+          );
+        }
+
+        return snapshot.data == null || snapshot.data!.isEmpty
+            ? const SizedBox.shrink()
+            : DropdownButtonFormField(
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.white),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                value: selectedModel,
+                style: const TextStyle(color: Colors.white),
+                dropdownColor: msgBg,
+                iconEnabledColor: btnBg,
+                items: List<DropdownMenuItem>.generate(
+                  snapshot.data!.length,
+                  (index) => DropdownMenuItem(
+                    value: snapshot.data![index].id,
+                    child: Text(snapshot.data![index].id),
+                  ),
+                ).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedModel = value!;
+                  });
+                },
+              );
       },
     );
   }

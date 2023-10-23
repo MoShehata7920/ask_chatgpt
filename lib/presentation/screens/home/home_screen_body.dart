@@ -39,7 +39,7 @@ class HomeScreenBody extends StatelessWidget {
             ElevationButtonWidget(
               buttonText: AppStrings.login,
               buttonFunction: () {
-                Navigator.pushNamed(context, Routes.loginRoute);
+                Navigator.pushReplacementNamed(context, Routes.loginRoute);
               },
             ).animateOnPageLoad(
                 msDelay: 300, dx: -70.0, dy: 0.0, showDelay: 300),
@@ -47,7 +47,7 @@ class HomeScreenBody extends StatelessWidget {
             ElevationButtonWidget(
               buttonText: AppStrings.singUp,
               buttonFunction: () {
-                Navigator.pushNamed(context, Routes.signUpRoute);
+                Navigator.pushReplacementNamed(context, Routes.signUpRoute);
               },
             ).animateOnPageLoad(
                 msDelay: 300, dx: 70.0, dy: 0.0, showDelay: 300),

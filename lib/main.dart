@@ -1,16 +1,16 @@
-import 'package:ask_chatgpt/data/repositories/repos.dart';
-import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'package:ask_chatgpt/data/repositories/repos.dart';
 import 'package:ask_chatgpt/firebase_options.dart';
+import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/manager/export/export.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +18,8 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // await dotenv.load();
-  
+  await dotenv.load();
+
   runApp(const MyApp());
 }
 

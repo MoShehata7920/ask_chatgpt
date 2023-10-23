@@ -96,7 +96,7 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
         // auth bloc
         BlocListener<AuthBloc, AuthState>(listener: (context, state) {
           if (state.authStatus == AuthStatus.authenticated) {
-            Navigator.pushNamed(context, Routes.chatScreenRoute);
+            Navigator.pushReplacementNamed(context, Routes.chatScreenRoute);
           }
         }),
       ],
@@ -192,7 +192,7 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
                                   const SizedBox(width: 5),
                                   GestureDetector(
                                     onTap: () {
-                                      Navigator.pushNamed(
+                                      Navigator.pushReplacementNamed(
                                           context,
                                           widget.isLoginScreen
                                               ? Routes.signUpRoute

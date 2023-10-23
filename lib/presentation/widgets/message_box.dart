@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
-import 'package:flutter/material.dart';
 
-class TextBoxWidget extends StatelessWidget {
-  const TextBoxWidget(
+class MessageBoxWidget extends StatelessWidget {
+  const MessageBoxWidget(
       {Key? key,
       required this.textController,
       required this.size,

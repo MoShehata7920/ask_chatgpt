@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.authStatus == AuthStatus.authenticated) {
-            Navigator.pushNamed(context, Routes.chatScreenRoute);
+            Navigator.pushReplacementNamed(context, Routes.chatScreenRoute);
           }
         },
         child: const HomeScreenBody(),
