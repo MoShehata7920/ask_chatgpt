@@ -1,3 +1,4 @@
+import 'package:ask_chatgpt/data/repositories/api_repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,7 +9,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:ask_chatgpt/data/repositories/repos.dart';
 import 'package:ask_chatgpt/firebase_options.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
-import 'package:ask_chatgpt/presentation/manager/export/export.dart';
+import 'package:ask_chatgpt/presentation/manager/export/cubits_exports.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
 
@@ -41,6 +42,11 @@ class MyApp extends StatelessWidget {
             firebaseAuth: FirebaseAuth.instance,
             firebaseFirestore: FirebaseFirestore.instance,
           ),
+        ),
+
+        // API repository
+        RepositoryProvider(
+          create: (context) => APIRepository(),
         ),
       ],
       child: MultiBlocProvider(
@@ -80,9 +86,18 @@ class MyApp extends StatelessWidget {
             ),
           ),
 
+          // open_ai_model cubit
+          BlocProvider(
+            create: (context) => OpenAiModelCubit(
+              apiRepository: context.read<APIRepository>(),
+            ),
+          ),
+
           // api_work cubit
           BlocProvider(
-            create: (context) => OpenAiModelCubit(),
+            create: (context) => OpenAiCompletionsCubit(
+              apiRepository: context.read<APIRepository>(),
+            ),
           ),
         ],
         child: MaterialApp(

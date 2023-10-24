@@ -1,8 +1,9 @@
-import "package:ask_chatgpt/data/models/custom_error.dart";
-import "package:ask_chatgpt/data/models/user.dart";
-import "package:ask_chatgpt/presentation/constants/firestore_ref.dart";
-import "package:firebase_auth/firebase_auth.dart" as fbauth;
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart" as fbauth;
+
+import "package:ask_chatgpt/presentation/constants/firestore_ref.dart";
+
+import '../models/exports/models_exports.dart';
 
 class ProfileRepository {
   final FirebaseFirestore firebaseFirestore;

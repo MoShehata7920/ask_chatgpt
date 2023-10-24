@@ -11,4 +11,5 @@ class AppIcons {
   static const copyMessage = Icons.content_paste;
   static const likeMessage = Icons.thumb_up_outlined;
   static const disLikeMessage = Icons.thumb_down_outlined;
+  static const refresh = Icons.refresh;
 }

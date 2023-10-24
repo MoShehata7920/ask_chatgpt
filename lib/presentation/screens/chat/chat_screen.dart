@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 
+import 'package:ask_chatgpt/data/models/open_ai_completion_model.dart';
 import 'package:ask_chatgpt/data/models/user.dart';
-import 'package:ask_chatgpt/data/repositories/api_repo.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/status.dart';
 import 'package:ask_chatgpt/presentation/manager/auth_bloc/auth_bloc.dart';
 import 'package:ask_chatgpt/presentation/manager/profile_cubit/profile_cubit.dart';
 import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
+import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/service/global_methods.dart';
@@ -70,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     backgroundColor: btnBg,
                     child: ClipOval(
                       child: Image.network(
-                        user.profileImage == ""
+                        user.profileImage.isEmpty
                             ? ImageAssets.avatarUrl
                             : user.profileImage,
                         width: 40,
@@ -100,39 +101,21 @@ class _ChatScreenState extends State<ChatScreen> {
             isUser: true,
             size: size,
             text: textController.text,
-            imgUrl: user.profileImage == ""
+            imgUrl: user.profileImage.isEmpty
                 ? ImageAssets.avatarUrl
                 : user.profileImage,
-            editFunction: () {
-              editText();
-            },
-            copyFunction: () {
-              copyResponse();
-            },
-            likeFunction: () {
-              likeResponse();
-            },
-            disLikeFunction: () {
-              disLikeResponse();
-            },
+            toggleIsLiked: toggleIsLike,
+            editFunction: editText,
+            copyFunction: copyResponse,
           ),
           MessageBubble(
             isUser: false,
             size: size,
             text: textController.text,
             imgUrl: ImageAssets.logo,
-            editFunction: () {
-              editText();
-            },
-            copyFunction: () {
-              copyResponse();
-            },
-            likeFunction: () {
-              likeResponse();
-            },
-            disLikeFunction: () {
-              disLikeResponse();
-            },
+            editFunction: editText,
+            copyFunction: copyResponse,
+            toggleIsLiked: toggleIsLike,
           ),
         ],
       ),
@@ -144,11 +127,22 @@ class _ChatScreenState extends State<ChatScreen> {
             MessageBoxWidget(
               textController: textController,
               size: size,
-              generateResponse: generateResponse,
+              generateResponse: generateCompletion,
             )
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      floatingActionButton: doneResponding
+          ? FloatingActionButton(
+              onPressed: () => regenerateCompletion(),
+              backgroundColor: accentColor,
+              child: const Icon(
+                AppIcons.refresh,
+                color: Colors.white,
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -162,7 +156,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   // generate response from OpenAI
-  void generateResponse() async {
+  void generateCompletion() async {
     FocusScope.of(context).unfocus();
     if (textController.text.isEmpty) {
       displaySnackBar(
@@ -176,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
       isLoading = true;
     });
     try {
-      await APIRepository.getModels();
+      // await APIRepository.getModels();
     } catch (e) {
       final logger = Logger();
       logger.e(e);
@@ -198,12 +192,12 @@ class _ChatScreenState extends State<ChatScreen> {
         context: context);
   }
 
-  // regenerate response
-  void regenerateResponse() {}
+  // regenerate completion
+  void regenerateCompletion() {}
 
   // copy response
-  void copyResponse() {
-    Clipboard.setData(const ClipboardData(text: 'abcdef')).then(
+  void copyResponse(String text) {
+    Clipboard.setData(ClipboardData(text: text)).then(
       (_) => displaySnackBar(
         status: Status.success,
         message: 'Copied successfully',
@@ -212,14 +206,18 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  // like response
-  void likeResponse() {}
-
-  // dislike response
-  void disLikeResponse() {}
+  // toggleIsLike response
+  void toggleIsLike({
+    required OpenAICompletion completion,
+    required bool value,
+  }) {}
 
   // edit text
-  void editText() {}
+  void editText(String text) {
+    setState(() {
+      textController.text == text;
+    });
+  }
 
   // show bottom modal
   Future<void> showBottomSheet() async {

@@ -12,15 +12,14 @@ class MessageBubble extends StatelessWidget {
     required this.isUser,
     required this.editFunction,
     required this.copyFunction,
-    required this.likeFunction,
-    required this.disLikeFunction,
+    required this.toggleIsLiked,
   }) : super(key: key);
 
   final Size size;
   final String text;
   final String imgUrl;
   final bool isUser;
-  final Function editFunction, copyFunction, likeFunction, disLikeFunction;
+  final Function editFunction, copyFunction, toggleIsLiked;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class MessageBubble extends StatelessWidget {
                     // like
                     GestureDetector(
                       onTap: () {
-                        likeFunction();
+                        toggleIsLiked(completion: '', value: true);
                       },
                       child: const Icon(
                         AppIcons.likeMessage,
@@ -89,7 +88,7 @@ class MessageBubble extends StatelessWidget {
                     // dislike
                     GestureDetector(
                       onTap: () {
-                        disLikeFunction();
+                        toggleIsLiked(completion: '', value: false);
                       },
                       child: const Icon(
                         AppIcons.disLikeMessage,

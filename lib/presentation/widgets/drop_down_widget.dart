@@ -1,4 +1,3 @@
-import 'package:ask_chatgpt/data/repositories/api_repo.dart';
 import 'package:ask_chatgpt/presentation/manager/open_ai_model_cubit/open_ai_model_cubit.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,7 @@ class _ModelDropDownButtonState extends State<ModelDropDownButton> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: APIRepository.getModels(),
+      future: context.read<OpenAiModelCubit>().fetchAllModels(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           const Center(
@@ -48,6 +47,8 @@ class _ModelDropDownButtonState extends State<ModelDropDownButton> {
         }
 
         return DropdownButtonFormField(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+          menuMaxHeight: 250,
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderSide: const BorderSide(color: Colors.white),
