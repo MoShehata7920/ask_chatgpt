@@ -16,9 +16,11 @@ class APIRepository {
       });
 
       Map jsonResponse = json.decode(response.body);
+
       if (jsonResponse['error'] != null) {
         throw http.ClientException(jsonResponse['error']['message']);
       }
+
       List models = [];
       for (var value in jsonResponse['data']) {
         models.add(value);
@@ -36,31 +38,41 @@ class APIRepository {
   }
 
   // fetch OpenAICompletion
-  Future<OpenAICompletion> getCompletion({
+  static Future<void> getCompletion({
     required String text,
-    required OpenAIModel model,
+    required String model,
   }) async {
+    final logger = Logger();
+    logger.i('text:$text, model: $model');
+
     try {
-      var response =
-          await http.post(Uri.parse(APIUrls.completionUrl), headers: {
-        'Authorization': 'Bearer ${dotenv.env['API_KEY']}',
-        'Content-Type': "application/json",
-      }, body: {
-        "model": model.id,
-        "prompt": text,
-        "max_tokens": 100,
-        "temperature": 0
-      });
-      var jsonResponse = json.decode(response.body);
+      var response = await http.post(
+        Uri.parse(APIUrls.completionUrl),
+        headers: {
+          'Authorization': 'Bearer ${dotenv.env['API_KEY']}',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "model": model,
+          "prompt": text,
+          "max_tokens": 100,
+          "temperature": 0
+        }),
+      );
+      Map jsonResponse = json.decode(response.body);
+
       if (jsonResponse['error'] != null) {
         throw http.ClientException(jsonResponse['error']['message']);
       }
 
-      final logger = Logger();
-      logger.i(jsonResponse);
+      if (jsonResponse['choices'].length > 0) {
+        logger.i('RESPONSE: ${jsonResponse['choices'][0]['text']}');
+      }
 
-      return OpenAICompletion.fromJson(jsonResponse);
+      // return OpenAICompletion.fromJson(jsonResponse['choices']['text']);
     } on CustomError catch (e) {
+      logger.e(e.errorMessage);
+
       throw CustomError(
           errorMessage: e.errorMessage, code: e.code, plugin: e.plugin);
     }

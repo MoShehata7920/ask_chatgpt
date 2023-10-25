@@ -1,3 +1,6 @@
+import 'package:ask_chatgpt/data/repositories/api_repo.dart';
+import 'package:ask_chatgpt/presentation/manager/open_ai_completions_cubit/open_ai_completions_cubit.dart';
+import 'package:ask_chatgpt/presentation/manager/open_ai_model_cubit/open_ai_model_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbauth;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logger/logger.dart';
 import 'package:lottie/lottie.dart';
 
-import 'package:ask_chatgpt/data/models/open_ai_completion_model.dart';
 import 'package:ask_chatgpt/data/models/user.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/status.dart';
@@ -106,7 +108,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 : user.profileImage,
             toggleIsLiked: toggleIsLike,
             editFunction: editText,
-            copyFunction: copyResponse,
+            copyFunction: () {
+              copyResponse(textController.text);
+            },
           ),
           MessageBubble(
             isUser: false,
@@ -114,7 +118,9 @@ class _ChatScreenState extends State<ChatScreen> {
             text: textController.text,
             imgUrl: ImageAssets.logo,
             editFunction: editText,
-            copyFunction: copyResponse,
+            copyFunction: () {
+              copyResponse(textController.text);
+            },
             toggleIsLiked: toggleIsLike,
           ),
         ],
@@ -170,7 +176,10 @@ class _ChatScreenState extends State<ChatScreen> {
       isLoading = true;
     });
     try {
-      // await APIRepository.getModels();
+      await APIRepository.getCompletion(
+        text: textController.text,
+        model: context.read<OpenAiModelCubit>().state.selectedModel,
+      );
     } catch (e) {
       final logger = Logger();
       logger.e(e);
@@ -208,9 +217,14 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // toggleIsLike response
   void toggleIsLike({
-    required OpenAICompletion completion,
+    required String completionId,
     required bool value,
-  }) {}
+  }) {
+    context.read<OpenAiCompletionsCubit>().toggleCompletionIsLike(
+          completionId: completionId,
+          value: value,
+        );
+  }
 
   // edit text
   void editText(String text) {

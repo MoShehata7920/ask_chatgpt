@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 
 class MessageBubble extends StatelessWidget {
-  const MessageBubble({
+  MessageBubble({
     Key? key,
     required this.imgUrl,
     required this.size,
@@ -13,11 +13,11 @@ class MessageBubble extends StatelessWidget {
     required this.editFunction,
     required this.copyFunction,
     required this.toggleIsLiked,
+    this.completionId = '',
   }) : super(key: key);
 
   final Size size;
-  final String text;
-  final String imgUrl;
+  final String text, imgUrl, completionId;
   final bool isUser;
   final Function editFunction, copyFunction, toggleIsLiked;
 
@@ -75,7 +75,7 @@ class MessageBubble extends StatelessWidget {
                     // like
                     GestureDetector(
                       onTap: () {
-                        toggleIsLiked(completion: '', value: true);
+                        toggleIsLiked(completion: completionId, value: true);
                       },
                       child: const Icon(
                         AppIcons.likeMessage,
@@ -88,7 +88,7 @@ class MessageBubble extends StatelessWidget {
                     // dislike
                     GestureDetector(
                       onTap: () {
-                        toggleIsLiked(completion: '', value: false);
+                        toggleIsLiked(completion: completionId, value: false);
                       },
                       child: const Icon(
                         AppIcons.disLikeMessage,
