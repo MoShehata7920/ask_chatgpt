@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:ask_chatgpt/presentation/constants/enums/auth_status.dart';
 import 'package:ask_chatgpt/presentation/manager/auth_bloc/auth_bloc.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/screens/home/home_screen_body.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -14,7 +15,8 @@ class HomeScreen extends StatelessWidget {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.authStatus == AuthStatus.authenticated) {
-            Navigator.pushReplacementNamed(context, Routes.chatScreenRoute);
+            Navigator.pushReplacementNamed(
+                context, Routes.chooseTypeScreenRoute);
           }
         },
         child: const HomeScreenBody(),

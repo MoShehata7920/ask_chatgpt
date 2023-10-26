@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:ask_chatgpt/presentation/constants/colors.dart';
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({
+  const MessageBubble({
     Key? key,
     required this.imgUrl,
     required this.size,
@@ -36,7 +36,7 @@ class MessageBubble extends StatelessWidget {
                 backgroundImage: AssetImage(imgUrl),
               ),
         title: Text(
-          text,
+          text.trim(),
           textAlign: TextAlign.justify,
           style: const TextStyle(
             color: Colors.white,

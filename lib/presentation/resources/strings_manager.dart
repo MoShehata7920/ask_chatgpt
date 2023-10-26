@@ -40,4 +40,5 @@ class AppStrings {
   static const String wantLogOut = "Do you want to log out?";
   static const String appName = "Ask ChatGPT";
   static const String sendMessage = "Send A Message";
+  static const String chooseTypeText = 'Select the type of operation you want';
 }

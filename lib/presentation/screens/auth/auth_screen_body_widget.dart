@@ -96,7 +96,7 @@ class _AuthScreenBodyWidgetState extends State<AuthScreenBodyWidget> {
         // auth bloc
         BlocListener<AuthBloc, AuthState>(listener: (context, state) {
           if (state.authStatus == AuthStatus.authenticated) {
-            Navigator.pushReplacementNamed(context, Routes.chatScreenRoute);
+            Navigator.pushReplacementNamed(context, Routes.chooseTypeScreenRoute);
           }
         }),
       ],

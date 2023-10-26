@@ -11,8 +11,11 @@ class OpenAIModel extends Equatable {
     required this.created,
   });
 
-  factory OpenAIModel.initial() =>
-      const OpenAIModel(id: '', root: '', created: 0);
+  factory OpenAIModel.initial() => const OpenAIModel(
+        id: '',
+        root: '',
+        created: 0,
+      );
 
   @override
   List<Object?> get props => [id, root, created];

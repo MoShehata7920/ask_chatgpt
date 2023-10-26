@@ -3,12 +3,14 @@ part of 'open_ai_completions_cubit.dart';
 class OpenAiCompletionsState extends Equatable {
   final String currentCompletion;
   final String currentMessage;
-  final List<OpenAICompletion> completions;
+  List<OpenAICompletion> completions;
+  List<OpenAICompletion> chats;
 
-  const OpenAiCompletionsState({
+  OpenAiCompletionsState({
     required this.currentCompletion,
     required this.currentMessage,
     required this.completions,
+    required this.chats,
   });
 
   // props
@@ -17,19 +19,21 @@ class OpenAiCompletionsState extends Equatable {
         currentCompletion,
         currentMessage,
         completions,
+        chats,
       ];
 
   // initial
-  factory OpenAiCompletionsState.initial() => const OpenAiCompletionsState(
+  factory OpenAiCompletionsState.initial() => OpenAiCompletionsState(
         currentCompletion: '',
         currentMessage: '',
         completions: [],
+        chats: [],
       );
 
   // toString()
   @override
   String toString() {
-    return 'OpenAiCompletionsState{currentCompletion: $currentCompletion, completions: $completions,currentMessage:$currentMessage}';
+    return 'OpenAiCompletionsState{currentCompletion: $currentCompletion, completions: $completions,chats: $chats,currentMessage:$currentMessage}';
   }
 
   // copyWith()
@@ -37,11 +41,13 @@ class OpenAiCompletionsState extends Equatable {
     String? currentCompletion,
     String? currentMessage,
     List<OpenAICompletion>? completions,
+    List<OpenAICompletion>? chats,
   }) {
     return OpenAiCompletionsState(
       currentCompletion: currentCompletion ?? this.currentCompletion,
-      currentMessage: currentMessage ?? this.currentMessage,
       completions: completions ?? this.completions,
+      chats: completions ?? this.chats,
+      currentMessage: currentMessage ?? this.currentMessage,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:ask_chatgpt/presentation/widgets/auth_screen_body_widget.dart';
+import 'package:ask_chatgpt/presentation/screens/auth/auth_screen_body_widget.dart';
 
 class SingUpScreen extends StatelessWidget {
   const SingUpScreen({super.key});

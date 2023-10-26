@@ -1,23 +1,28 @@
 import 'package:equatable/equatable.dart';
 
 class OpenAICompletion extends Equatable {
-  final String id;
-  final String text;
-  bool isLiked;
+  final String id, text;
+  bool isLiked, isUser;
 
   OpenAICompletion({
     required this.id,
     required this.text,
     this.isLiked = false,
+    this.isUser = false,
   });
 
   @override
-  List<Object?> get props => [id, text, isLiked];
+  List<Object?> get props => [
+        id,
+        text,
+        isLiked,
+        isUser,
+      ];
 
   factory OpenAICompletion.fromJson(Map<String, dynamic> data) =>
       OpenAICompletion(
         id: data['id'],
-        text: data['choices'][0]['text'],
+        text: data['text'],
       );
 
   factory OpenAICompletion.initial() => OpenAICompletion(id: '', text: '');

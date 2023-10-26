@@ -5,15 +5,17 @@ import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 
 class MessageBoxWidget extends StatelessWidget {
-  const MessageBoxWidget(
-      {Key? key,
-      required this.textController,
-      required this.size,
-      required this.generateResponse})
-      : super(key: key);
+  const MessageBoxWidget({
+    Key? key,
+    required this.textController,
+    required this.size,
+    required this.generateResponse,
+    required this.isTyping,
+  }) : super(key: key);
   final Size size;
   final TextEditingController textController;
   final Function generateResponse;
+  final bool isTyping;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class MessageBoxWidget extends StatelessWidget {
           hintText: AppStrings.sendMessage,
           hintStyle: const TextStyle(color: hintColor),
           suffixIcon: GestureDetector(
-            onTap: () => generateResponse(),
+            onTap: () => isTyping ? null : generateResponse(),
             child: const Icon(
               AppIcons.send,
               color: hintColor,

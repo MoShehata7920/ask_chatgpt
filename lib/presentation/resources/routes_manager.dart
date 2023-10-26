@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
+
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/screens/auth/login/login_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/auth/sign_up/sign_up_screen.dart';
-import 'package:ask_chatgpt/presentation/screens/chat/chat_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/inner_screen/chat/chat_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/choose_type/choose_type_screen.dart';
+import 'package:ask_chatgpt/presentation/screens/inner_screen/completion/completion_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/home/home_screen.dart';
 import 'package:ask_chatgpt/presentation/screens/splash_screen/splash_screen.dart';
-import 'package:flutter/material.dart';
 
 class Routes {
   static const String splashRoute = "/";
@@ -12,6 +15,8 @@ class Routes {
   static const String loginRoute = "/login";
   static const String signUpRoute = "/signUp";
   static const String chatScreenRoute = "/chatScreen";
+  static const String chooseTypeScreenRoute = "/chooseTypeScreen";
+  static const String completionScreenRoute = "/completionScreen";
 }
 
 class RouteGenerator {
@@ -31,6 +36,14 @@ class RouteGenerator {
 
       case Routes.chatScreenRoute:
         return MaterialPageRoute(builder: (context) => const ChatScreen());
+
+      case Routes.chooseTypeScreenRoute:
+        return MaterialPageRoute(
+            builder: (context) => const ChooseTypeScreen());
+
+      case Routes.completionScreenRoute:
+        return MaterialPageRoute(
+            builder: (context) => const CompletionScreen());
 
       default:
         return unDefinedRoute();

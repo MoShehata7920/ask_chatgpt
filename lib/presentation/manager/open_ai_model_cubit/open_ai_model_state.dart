@@ -8,7 +8,7 @@ class OpenAiModelState extends Equatable {
 
   // initial()
   factory OpenAiModelState.initial() => const OpenAiModelState(
-        selectedModel: 'text-davinci-001',
+        selectedModel: 'text-davinci-003',
         models: [],
       );
 

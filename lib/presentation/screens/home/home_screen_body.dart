@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+
 import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/service/animation.dart';
-import 'package:ask_chatgpt/presentation/widgets/elvation_button_widget.dart';
-import 'package:flutter/material.dart';
+import 'package:ask_chatgpt/presentation/widgets/elevation_button_widget.dart';
 
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({super.key});
