@@ -26,11 +26,6 @@ class OpenAiCompletionsCubit extends Cubit<OpenAiCompletionsState> {
   //   return completion;
   // }
 
-  // set current completion
-  void setCurrentCompletion(String text) {
-    emit(state.copyWith(currentCompletion: text));
-  }
-
   // set current message
   void setCurrentMessage(String text) {
     emit(state.copyWith(currentMessage: text));

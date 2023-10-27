@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as fbauth;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,8 +52,11 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
     super.initState();
     fetchUserData();
     final logger = Logger();
-    logger.i('Mode: ${widget.isChatScreen}');
-    logger.i('Model: ${context.read<OpenAiModelCubit>().state.selectedModel}');
+    if (kDebugMode) {
+      logger.i('Mode: ${widget.isChatScreen}');
+      logger
+          .i('Model: ${context.read<OpenAiModelCubit>().state.selectedModel}');
+    }
   }
 
   @override
@@ -241,9 +245,6 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       // persist last sent text
       cxt.setCurrentMessage(textController.text);
 
-      // persist completion
-      cxt.setCurrentCompletion('');
-
       if (widget.isChatScreen) {
         // set chats
         cxt.setChats(chats: data);
@@ -258,7 +259,9 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       });
     } catch (e) {
       final logger = Logger();
-      logger.e(e);
+      if (kDebugMode) {
+        logger.e(e);
+      }
     } finally {
       setState(() {
         isTyping = false;
@@ -266,8 +269,46 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
     }
   }
 
-  // regenerate completion
-  void regenerateCompletion() {}
+  // regenerate completion or chat
+  void regenerateCompletion() async {
+    setState(() {
+      isTyping = true;
+    });
+    var cxt = context.read<OpenAiCompletionsCubit>(); // completion cubit
+
+    List<OpenAICompletion> response = [];
+    try {
+      if (widget.isChatScreen) {
+        response = await APIRepository.getChat(
+          text: cxt.state.currentMessage,
+          model: context.read<OpenAiModelCubit>().state.selectedModel,
+        );
+      } else {
+        response = await APIRepository.getCompletion(
+          text: cxt.state.currentMessage,
+          model: context.read<OpenAiModelCubit>().state.selectedModel,
+        );
+      }
+      if (widget.isChatScreen) {
+        // set chats
+        cxt.setChats(chats: response);
+      } else {
+        // set completions
+        cxt.setCompletion(completions: response);
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        final logger = Logger();
+        if (kDebugMode) {
+          logger.e(e);
+        }
+      }
+    } finally {
+      setState(() {
+        isTyping = false;
+      });
+    }
+  }
 
   // copy response
   void copyResponse(String text) {
@@ -294,7 +335,7 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
   // edit text
   void editText(String text) {
     setState(() {
-      textController.text == text;
+      textController.text = text;
     });
   }
 
