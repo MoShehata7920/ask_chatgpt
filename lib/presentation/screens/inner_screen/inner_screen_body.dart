@@ -225,6 +225,16 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
         isUser: true,
       ),
     );
+    // set user data
+    if (widget.isChatScreen) {
+      // set chats
+      cxt.setChats(chats: data);
+    } else {
+      // set completions
+      cxt.setCompletion(completions: data);
+    }
+
+    // response from API
     List<OpenAICompletion> response = [];
     try {
       if (widget.isChatScreen) {
@@ -239,18 +249,16 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
         );
       }
 
-      // accumulate data
-      data.addAll(response);
-
       // persist last sent text
       cxt.setCurrentMessage(textController.text);
 
+      // set response from API
       if (widget.isChatScreen) {
         // set chats
-        cxt.setChats(chats: data);
+        cxt.setChats(chats: response);
       } else {
         // set completions
-        cxt.setCompletion(completions: data);
+        cxt.setCompletion(completions: response);
       }
 
       setState(() {
