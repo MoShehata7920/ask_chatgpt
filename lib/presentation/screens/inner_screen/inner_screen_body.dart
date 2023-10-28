@@ -22,7 +22,6 @@ import 'package:ask_chatgpt/presentation/resources/assets_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/routes_manager.dart';
 import 'package:ask_chatgpt/presentation/resources/strings_manager.dart';
 import 'package:ask_chatgpt/presentation/service/global_methods.dart';
-import 'package:ask_chatgpt/presentation/widgets/container_bg.dart';
 import 'package:ask_chatgpt/presentation/widgets/drop_down_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/loading_widget.dart';
 import 'package:ask_chatgpt/presentation/widgets/message_box.dart';
@@ -44,7 +43,7 @@ class InnerScreenBody extends StatefulWidget {
 class _InnerScreenBodyState extends State<InnerScreenBody> {
   final TextEditingController textController = TextEditingController();
   bool isTyping = false,
-      isProfileImgLoading = true,
+      isProfileImageLoading = true,
       isCompletionDone = false,
       isFirstRun = true;
   User user = User.initial(); // setting user to initial (empty)
@@ -64,6 +63,12 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       logger
           .i('Model: ${context.read<OpenAiModelCubit>().state.selectedModel}');
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    scrollToEnd();
+    super.didChangeDependencies();
   }
 
   @override
@@ -90,7 +95,7 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
           ],
         ),
         actions: [
-          isProfileImgLoading
+          isProfileImageLoading
               ? const LoadingWidget(size: 10)
               : GestureDetector(
                   onTap: () {
@@ -138,62 +143,56 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
             )
           : const SizedBox.shrink(),
       extendBody: true,
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 70.0),
-        child: SizedBox(
-          height: size.height / 1,
-          child: ListView.builder(
-            controller: scrollController,
-            itemCount: widget.isChatScreen
-                ? openAICubit.chats.length
-                : openAICubit.completions.length,
-            itemBuilder: (context, index) {
-              var completion = widget.isChatScreen
-                  ? openAICubit.chats[index]
-                  : openAICubit.completions[index];
-
-              // messageBubble for holding messages
-              return MessageBubble(
-                isUser: completion.isUser,
-                size: size,
-                text: completion.text,
-                imgUrl: completion.isUser
-                    ? user.profileImage.isEmpty
-                        ? ImageAssets.avatarUrl
-                        : user.profileImage
-                    : ImageAssets.logo,
-                toggleIsLiked: toggleIsLike,
-                copyFunction: copyResponse,
-                editFunction: editText,
-                completionId: completion.id,
-                isLiked: completion.isLiked,
-                operationType: widget.isChatScreen
-                    ? OperationType.chat
-                    : OperationType.completion,
-                isFirstRun: isFirstRun,
-                indexPosition: index,
-                messageLength: widget.isChatScreen
-                    ? openAICubit.chats.length
-                    : openAICubit.completions.length,
-              );
-            },
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: ListView.builder(
+              padding: const EdgeInsets.only(bottom: 20),
+              controller: scrollController,
+              itemCount: widget.isChatScreen
+                  ? openAICubit.chats.length
+                  : openAICubit.completions.length,
+              itemBuilder: (context, index) {
+                var completion = widget.isChatScreen
+                    ? openAICubit.chats[index]
+                    : openAICubit.completions[index];
+                // messageBubble for holding messages
+                return MessageBubble(
+                  isUser: completion.isUser,
+                  size: size,
+                  text: completion.text,
+                  imgUrl: completion.isUser
+                      ? user.profileImage.isEmpty
+                          ? ImageAssets.avatarUrl
+                          : user.profileImage
+                      : ImageAssets.logo,
+                  toggleIsLiked: toggleIsLike,
+                  copyFunction: copyResponse,
+                  editFunction: editText,
+                  completionId: completion.id,
+                  isLiked: completion.isLiked,
+                  operationType: widget.isChatScreen
+                      ? OperationType.chat
+                      : OperationType.completion,
+                  isFirstRun: isFirstRun,
+                  indexPosition: index,
+                  messageLength: widget.isChatScreen
+                      ? openAICubit.chats.length
+                      : openAICubit.completions.length,
+                );
+              },
+            ),
           ),
-        ),
-      ),
-      bottomSheet: ContainerBg(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            isTyping ? const TextLoading() : const SizedBox.shrink(),
-            // message box
-            MessageBoxWidget(
-              textController: textController,
-              size: size,
-              generateResponse: generateCompletion,
-              isTyping: isTyping,
-            )
-          ],
-        ),
+          isTyping ? const TextLoading() : const SizedBox.shrink(),
+          // message box
+          MessageBoxWidget(
+            textController: textController,
+            size: size,
+            generateResponse: generateCompletion,
+            isTyping: isTyping,
+          )
+        ],
       ),
     );
   }
@@ -203,7 +202,7 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
     await context.read<ProfileCubit>().getProfile(userId: userId);
     setState(() {
       user = context.read<ProfileCubit>().state.user;
-      isProfileImgLoading = false;
+      isProfileImageLoading = false;
     });
   }
 

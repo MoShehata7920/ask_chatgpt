@@ -40,7 +40,7 @@ class OpenAiCompletionsState extends Equatable {
   }) {
     return OpenAiCompletionsState(
       completions: completions ?? this.completions,
-      chats: completions ?? this.chats,
+      chats: chats ?? this.chats,
       currentMessage: currentMessage ?? this.currentMessage,
     );
   }
