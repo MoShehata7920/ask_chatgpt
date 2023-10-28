@@ -1,8 +1,10 @@
+import 'package:ask_chatgpt/presentation/constants/enums/operation_type.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 import 'package:ask_chatgpt/data/models/open_ai_completion_model.dart';
 import 'package:ask_chatgpt/data/repositories/api_repo.dart';
+import 'package:logger/logger.dart';
 
 part 'open_ai_completions_state.dart';
 
@@ -47,25 +49,45 @@ class OpenAiCompletionsCubit extends Cubit<OpenAiCompletionsState> {
 
   // toggle isLiked
   void toggleCompletionIsLike({
-    required String completionId,
+    required String id,
     required bool value,
+    required OperationType operationType,
   }) {
-    final newCompletions = state.completions.map((OpenAICompletion completion) {
-      if (completion.id == completionId) {
-        return OpenAICompletion(
-          id: completion.id,
-          text: completion.text,
-          isLiked: value,
-        );
-      }
-      return completion;
-    }).toList();
+    List<OpenAICompletion> newList = [];
+    switch (operationType) {
+      case OperationType.completion:
+        newList = state.completions.map((OpenAICompletion completion) {
+          if (completion.id == id) {
+            return OpenAICompletion(
+              id: completion.id,
+              text: completion.text,
+              isLiked: value,
+              isUser: false,
+            );
+          }
+          return completion;
+        }).toList();
 
-    // OpenAICompletion completion = state.completions
-    //     .firstWhere((completion) => completion.id == completionId);
-    //
-    // completion.toggleIsLiked(value);
+        emit(state.copyWith(completions: newList));
+        break;
 
-    emit(state.copyWith(completions: newCompletions));
+      case OperationType.chat:
+        newList = state.chats.map((OpenAICompletion chat) {
+          if (chat.id == id) {
+            return OpenAICompletion(
+              id: chat.id,
+              text: chat.text,
+              isLiked: value,
+              isUser: false,
+            );
+          }
+          return chat;
+        }).toList();
+        final logger = Logger();
+        logger.i(newList);
+
+        emit(state.copyWith(chats: newList));
+        break;
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ask_chatgpt/presentation/constants/enums/operation_type.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbauth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,16 +41,17 @@ class InnerScreenBody extends StatefulWidget {
 
 class _InnerScreenBodyState extends State<InnerScreenBody> {
   final TextEditingController textController = TextEditingController();
-  bool isTyping = false;
-  bool isProfileImgLoading = true;
-  bool isCompletionDone = false;
+  bool isTyping = false, isProfileImgLoading = true, isCompletionDone = false;
   User user = User.initial(); // setting user to initial (empty)
   final userId = fbauth.FirebaseAuth.instance.currentUser!.uid; // user id
+  late ScrollController scrollController;
 
   // init State
   @override
   void initState() {
     super.initState();
+    scrollController = ScrollController();
+    scrollToEnd();
     fetchUserData();
     final logger = Logger();
     if (kDebugMode) {
@@ -136,28 +138,36 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
         child: SizedBox(
           height: size.height / 1,
           child: ListView.builder(
-              itemCount: widget.isChatScreen
-                  ? openAICubit.chats.length
-                  : openAICubit.completions.length,
-              itemBuilder: (context, index) {
-                var completion = widget.isChatScreen
-                    ? openAICubit.chats[index]
-                    : openAICubit.completions[index];
-                return MessageBubble(
-                  isUser: completion.isUser,
-                  size: size,
-                  text: completion.text,
-                  imgUrl: completion.isUser
-                      ? user.profileImage.isEmpty
-                          ? ImageAssets.avatarUrl
-                          : user.profileImage
-                      : ImageAssets.logo,
-                  toggleIsLiked: toggleIsLike,
-                  copyFunction: copyResponse,
-                  editFunction: editText,
-                  completionId: completion.id,
-                );
-              }),
+            controller: scrollController,
+            itemCount: widget.isChatScreen
+                ? openAICubit.chats.length
+                : openAICubit.completions.length,
+            itemBuilder: (context, index) {
+              var completion = widget.isChatScreen
+                  ? openAICubit.chats[index]
+                  : openAICubit.completions[index];
+
+              // messageBubble for holding messages
+              return MessageBubble(
+                isUser: completion.isUser,
+                size: size,
+                text: completion.text,
+                imgUrl: completion.isUser
+                    ? user.profileImage.isEmpty
+                        ? ImageAssets.avatarUrl
+                        : user.profileImage
+                    : ImageAssets.logo,
+                toggleIsLiked: toggleIsLike,
+                copyFunction: copyResponse,
+                editFunction: editText,
+                completionId: completion.id,
+                isLiked: completion.isLiked,
+                operationType: widget.isChatScreen
+                    ? OperationType.chat
+                    : OperationType.completion,
+              );
+            },
+          ),
         ),
       ),
       bottomSheet: ContainerBg(
@@ -165,6 +175,7 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
           mainAxisSize: MainAxisSize.min,
           children: [
             isTyping ? const TextLoading() : const SizedBox.shrink(),
+            // message box
             MessageBoxWidget(
               textController: textController,
               size: size,
@@ -232,6 +243,8 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
     } else {
       // set completions
       cxt.setCompletion(completions: data);
+
+      scrollToEnd(); // scroll to end
     }
 
     // response from API
@@ -274,6 +287,8 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       setState(() {
         isTyping = false;
       });
+
+      scrollToEnd();
     }
   }
 
@@ -315,6 +330,8 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       setState(() {
         isTyping = false;
       });
+
+      scrollToEnd();
     }
   }
 
@@ -331,12 +348,14 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
 
   // toggleIsLike response
   void toggleIsLike({
-    required String completionId,
+    required String id,
     required bool value,
+    required OperationType operationType,
   }) {
     context.read<OpenAiCompletionsCubit>().toggleCompletionIsLike(
-          completionId: completionId,
+          id: id,
           value: value,
+          operationType: operationType,
         );
   }
 
@@ -377,9 +396,21 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
     );
   }
 
+  // scroll function
+  void scrollToEnd() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.decelerate,
+      );
+    });
+  }
+
   @override
   void dispose() {
     textController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 }

@@ -1,3 +1,4 @@
+import 'package:ask_chatgpt/presentation/constants/enums/operation_type.dart';
 import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -13,13 +14,16 @@ class MessageBubble extends StatelessWidget {
     required this.editFunction,
     required this.copyFunction,
     required this.toggleIsLiked,
-    this.completionId = '',
+    required this.completionId,
+    required this.isLiked,
+    required this.operationType,
   }) : super(key: key);
 
   final Size size;
   final String text, imgUrl, completionId;
-  final bool isUser;
+  final bool isUser, isLiked;
   final Function editFunction, copyFunction, toggleIsLiked;
+  final OperationType operationType;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +79,11 @@ class MessageBubble extends StatelessWidget {
                     // like
                     GestureDetector(
                       onTap: () {
-                        toggleIsLiked(completion: completionId, value: true);
+                        toggleIsLiked(
+                          id: completionId,
+                          value: true,
+                          operationType: operationType,
+                        );
                       },
                       child: const Icon(
                         AppIcons.likeMessage,
@@ -88,7 +96,11 @@ class MessageBubble extends StatelessWidget {
                     // dislike
                     GestureDetector(
                       onTap: () {
-                        toggleIsLiked(completion: completionId, value: false);
+                        toggleIsLiked(
+                          id: completionId,
+                          value: false,
+                          operationType: operationType,
+                        );
                       },
                       child: const Icon(
                         AppIcons.disLikeMessage,
