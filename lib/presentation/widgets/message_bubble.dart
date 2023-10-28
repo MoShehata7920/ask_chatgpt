@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ask_chatgpt/presentation/constants/enums/operation_type.dart';
 import 'package:ask_chatgpt/presentation/resources/icons_manager.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,15 @@ class MessageBubble extends StatelessWidget {
     required this.completionId,
     required this.isLiked,
     required this.operationType,
+    required this.isFirstRun,
+    required this.indexPosition,
+    required this.messageLength,
   }) : super(key: key);
 
   final Size size;
   final String text, imgUrl, completionId;
-  final bool isUser, isLiked;
+  final bool isUser, isLiked, isFirstRun;
+  final int indexPosition, messageLength;
   final Function editFunction, copyFunction, toggleIsLiked;
   final OperationType operationType;
 
@@ -39,14 +44,37 @@ class MessageBubble extends StatelessWidget {
                 backgroundColor: btnBg,
                 backgroundImage: AssetImage(imgUrl),
               ),
-        title: Text(
-          text.trim(),
-          textAlign: TextAlign.justify,
-          style: const TextStyle(
-            color: Colors.white,
-            height: 1.5,
-          ),
-        ),
+        title: isUser
+            ? Text(
+                text.trim(),
+                style: const TextStyle(
+                  color: Colors.white,
+                  height: 1.5,
+                ),
+              )
+            : !isFirstRun && indexPosition == messageLength - 1
+                ? AnimatedTextKit(
+                    repeatForever: false,
+                    isRepeatingAnimation: false,
+                    displayFullTextOnTap: true,
+                    totalRepeatCount: 0,
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        text.trim(),
+                        textStyle: const TextStyle(
+                          color: Colors.white,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  )
+                : Text(
+                    text.trim(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      height: 1.5,
+                    ),
+                  ),
         trailing: SizedBox(
           width: size.width / 5,
           child: isUser

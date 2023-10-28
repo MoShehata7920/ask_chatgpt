@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:ask_chatgpt/presentation/constants/enums/operation_type.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fbauth;
 import 'package:flutter/foundation.dart';
@@ -41,7 +43,10 @@ class InnerScreenBody extends StatefulWidget {
 
 class _InnerScreenBodyState extends State<InnerScreenBody> {
   final TextEditingController textController = TextEditingController();
-  bool isTyping = false, isProfileImgLoading = true, isCompletionDone = false;
+  bool isTyping = false,
+      isProfileImgLoading = true,
+      isCompletionDone = false,
+      isFirstRun = true;
   User user = User.initial(); // setting user to initial (empty)
   final userId = fbauth.FirebaseAuth.instance.currentUser!.uid; // user id
   late ScrollController scrollController;
@@ -165,6 +170,11 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
                 operationType: widget.isChatScreen
                     ? OperationType.chat
                     : OperationType.completion,
+                isFirstRun: isFirstRun,
+                indexPosition: index,
+                messageLength: widget.isChatScreen
+                    ? openAICubit.chats.length
+                    : openAICubit.completions.length,
               );
             },
           ),
@@ -215,6 +225,9 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
   // generate response from OpenAI
   void generateCompletion() async {
     FocusScope.of(context).unfocus();
+    setState(() {
+      isFirstRun = false;
+    });
     if (textController.text.isEmpty) {
       displaySnackBar(
         status: Status.error,
@@ -283,6 +296,11 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
       if (kDebugMode) {
         logger.e(e);
       }
+      displaySnackBar(
+        status: Status.error,
+        message: e.toString(),
+        context: context,
+      );
     } finally {
       setState(() {
         isTyping = false;
@@ -296,6 +314,7 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
   void regenerateCompletion() async {
     setState(() {
       isTyping = true;
+      isFirstRun = false;
     });
     var cxt = context.read<OpenAiCompletionsCubit>(); // completion cubit
 
@@ -326,6 +345,12 @@ class _InnerScreenBodyState extends State<InnerScreenBody> {
           logger.e(e);
         }
       }
+
+      displaySnackBar(
+        status: Status.error,
+        message: e.toString(),
+        context: context,
+      );
     } finally {
       setState(() {
         isTyping = false;
