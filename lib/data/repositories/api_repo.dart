@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_config/flutter_config.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class APIRepository {
   Future<List<OpenAIModel>> getModels() async {
     try {
       var response = await http.get(Uri.parse(APIUrls.modelUrl), headers: {
-        'Authorization': 'Bearer ${dotenv.env['API_KEY']}',
+        'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
       });
 
       Map jsonResponse = json.decode(response.body);
@@ -49,7 +50,7 @@ class APIRepository {
       var response = await http.post(
         Uri.parse(APIUrls.completionUrl),
         headers: {
-          'Authorization': 'Bearer ${dotenv.env['API_KEY']}',
+          'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -98,7 +99,7 @@ class APIRepository {
       var response = await http.post(
         Uri.parse(APIUrls.chatUrl),
         headers: {
-          'Authorization': 'Bearer ${dotenv.env['API_KEY']}',
+          'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
