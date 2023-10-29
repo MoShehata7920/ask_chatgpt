@@ -1,16 +1,31 @@
-# ask_chatgpt
+# Ask ChatGPT
 
-A new Flutter project.
+A Chat Application Powered by OpenAI's ChatGPT
 
-## Getting Started
+## Table of Contents
 
-This project is a starting point for a Flutter application.
+- [Ask ChatGPT](#ask_chatgpt)
+  - [Table of Contents](#table-of-contents)
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Contributing](#contributing)
+  - [License](#license)
 
-A few resources to get you started if this is your first Flutter project:
+## Description
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This project is a Flutter-based chat application that utilizes OpenAI's ChatGPT to provide conversational AI capabilities. It enables users to have interactive and dynamic conversations with an AI chatbot. The app integrates Google authentication, Bloc for state management, animated Text Kit for engaging user interfaces, the HTTP package for API calls, and Firebase Remote Config for dynamic configuration.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Installation
+
+1. Clone the repository.
+2. Open the project in your preferred Flutter development environment.
+3. Run the app on an emulator or physical device.
+
+## Contributing
+
+Contributions are welcome! Feel free to open an issue or create a pull request.
+
+## License
+
+[MIT License](LICENSE)
