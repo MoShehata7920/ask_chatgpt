@@ -22,8 +22,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply from: project(':flutter_config').projectDir.getPath() + "/dotenv.gradle"
-
 android {
     namespace "com.example.ask_chatgpt"
     compileSdkVersion flutter.compileSdkVersion

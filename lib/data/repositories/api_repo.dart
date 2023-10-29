@@ -1,7 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_config/flutter_config.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/exports/models_exports.dart';
@@ -11,9 +10,12 @@ import 'package:logger/logger.dart';
 class APIRepository {
   // fetch OpenAIModels
   Future<List<OpenAIModel>> getModels() async {
+    const storage = FlutterSecureStorage();
+    String? apiKey = await storage.read(key: 'API_KEY');
+
     try {
       var response = await http.get(Uri.parse(APIUrls.modelUrl), headers: {
-        'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
+        'Authorization': 'Bearer $apiKey',
       });
 
       Map jsonResponse = json.decode(response.body);
@@ -46,11 +48,14 @@ class APIRepository {
     final logger = Logger();
     logger.i('text:$text, model: $model');
 
+    const storage = FlutterSecureStorage();
+    String? apiKey = await storage.read(key: 'API_KEY');
+
     try {
       var response = await http.post(
         Uri.parse(APIUrls.completionUrl),
         headers: {
-          'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
+          'Authorization': 'Bearer $apiKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
@@ -95,11 +100,14 @@ class APIRepository {
     final logger = Logger();
     logger.i('text:$text, model: $model');
 
+    const storage = FlutterSecureStorage();
+    String? apiKey = await storage.read(key: 'API_KEY');
+
     try {
       var response = await http.post(
         Uri.parse(APIUrls.chatUrl),
         headers: {
-          'Authorization': 'Bearer ${FlutterConfig.get('API_KEY')}',
+          'Authorization': 'Bearer $apiKey',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({

@@ -1,10 +1,12 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:ask_chatgpt/data/repositories/api_repo.dart';
+import 'package:ask_chatgpt/data/repositories/config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_config/flutter_config.dart';
 
 import 'package:ask_chatgpt/data/repositories/repos.dart';
 import 'package:ask_chatgpt/firebase_options.dart';
@@ -19,8 +21,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // await dotenv.load();
-  await FlutterConfig.loadEnvVariables();
+  await Config.fetchApiKey();
 
   runApp(const MyApp());
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 part of 'open_ai_completions_cubit.dart';
 
 class OpenAiCompletionsState extends Equatable {
@@ -22,8 +24,8 @@ class OpenAiCompletionsState extends Equatable {
   // initial
   factory OpenAiCompletionsState.initial() => OpenAiCompletionsState(
         currentMessage: '',
-        completions: [],
-        chats: [],
+        completions: const [],
+        chats: const [],
       );
 
   // toString()
